@@ -1,11 +1,13 @@
-const quoteContainer = document.getElementById("quote-container");
-const quoteText = document.getElementById("quote");
-const authorText = document.getElementById("author");
-const twitterBtn = document.getElementById("twitter");
-const newQuoteBtn = document.getElementById("new-quote");
-const loader = document.getElementById("loader");
+const quoteContainer = document.getElementById(
+  "quote-container"
+)! as HTMLElement;
+const quoteText = document.getElementById("quote")! as HTMLElement;
+const authorText = document.getElementById("author")! as HTMLElement;
+const twitterBtn = document.getElementById("twitter")! as HTMLButtonElement;
+const newQuoteBtn = document.getElementById("new-quote")! as HTMLButtonElement;
+const loader = document.getElementById("loader")! as HTMLElement;
 
-let quotes = [];
+let quotes: {}[] = [];
 
 // loading
 const loading = () => {
@@ -22,10 +24,13 @@ const complete = () => {
 // generate new quote
 const newQuote = () => {
   loading();
-  const quote = quotes[Math.floor(Math.random() * quotes.length)];
+  type Quote = {
+    [key: string]: string;
+  };
+  const quote: Quote = quotes[Math.floor(Math.random() * quotes.length)];
   //   console.log(quote);
   if (!quote.author) {
-    authorText.textContent = "unkonown";
+    authorText.textContent = "unknown";
   } else {
     authorText.textContent = quote.author;
   }
@@ -46,7 +51,7 @@ async function getQuotes() {
   const apiUrl = "https://type.fit/api/quotes";
   try {
     const res = await fetch(apiUrl);
-    quotes = await res.json();
+    quotes = await res?.json();
     newQuote();
   } catch (error) {
     quoteText.textContent = `Ooopps... Please try again.`;
@@ -54,8 +59,8 @@ async function getQuotes() {
 }
 
 // tweet quote
-const tweetQuote = () => {
-  const twitterURL = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`;
+const tweetQuote = (): void => {
+  const twitterURL: string = `https://twitter.com/intent/tweet?text=${quoteText.textContent} - ${authorText.textContent}`;
   window.open(twitterURL, "_blank");
 };
 
